@@ -163,10 +163,10 @@ public class Noticia {
 	 * 
 	 * @param arg Objeto de tipo noticia a ser comparado con @this
 	 * @return result True si es la misma noticia y False si no lo es
-	 * @throws NullPointerException si el argumento que recibe es null
 	 */
 	@Override
 	public boolean equals(Object arg){
+		if(arg == null) return super.equals(arg);
 		Noticia noticia = (Noticia) arg;
 		
 		if(getTitular().equals(noticia.titular) 
