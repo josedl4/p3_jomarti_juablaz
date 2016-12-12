@@ -39,8 +39,10 @@ public class Noticia {
 	 * @throws IllegalArgumentException La fuente es vacia.
 	 */
 	public Noticia(String titular, GregorianCalendar fechaPublicacion, String fuente, URL url, EnumCategoria categoria){
+		if(titular == null) throw new IllegalArgumentException("Los parametros para crear la noticia no son correctos");
+		
 		String[] palabras = titular.split(" ");
-		if((titular == null) || (palabras.length == 0) || (palabras.length > 13)
+		if( titular.equals("") || (palabras.length > 13)
 				|| (fechaPublicacion == null) || (categoria == null) || (url == null)
 				|| (fuente == null) || fuente.equals(""))
 			throw new IllegalArgumentException("Los parametros para crear la noticia no son correctos");
@@ -148,7 +150,7 @@ public class Noticia {
 		
 		long daysDiff = TimeUnit.MILLISECONDS.toDays(Math.abs(diff));
 		
-		if((getTitular().equals(noticia.getTitular())) && (getFuente().equals(noticia.getFuente()))
+		if((getTitular().equals(noticia.getTitular())) 
 				&& getCategoria().equals(noticia.getCategoria()) && daysDiff <= 2)
 			return true;
 		
