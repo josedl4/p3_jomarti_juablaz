@@ -157,4 +157,25 @@ public class Noticia {
 		return false;
 	}
 	
+	
+	/**
+	 * Reimplementación del metodo equals de object para nuestra clase noticia
+	 * 
+	 * @param arg Objeto de tipo noticia a ser comparado con @this
+	 * @return result True si es la misma noticia y False si no lo es
+	 * @throws NullPointerException si el argumento que recibe es null
+	 */
+	@Override
+	public boolean equals(Object arg){
+		Noticia noticia = (Noticia) arg;
+		
+		if(getTitular().equals(noticia.titular) 
+				&& getFuente().equals(noticia.getFuente()) 
+				&& getURL().equals(noticia.getURL()) 
+				&& getCategoria().equals(noticia.getCategoria())
+				&& getFechaPublicacion().equals(noticia.getFechaPublicacion()))
+			return true;
+		
+		return false;
+	}
 }
