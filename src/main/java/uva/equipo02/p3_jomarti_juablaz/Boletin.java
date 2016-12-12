@@ -1,7 +1,9 @@
 package uva.equipo02.p3_jomarti_juablaz;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -9,7 +11,6 @@ import java.util.GregorianCalendar;
  *
  */
 public class Boletin {
-	@SuppressWarnings("unused")
 	private ArrayList<Noticia> listaNoticias;
 	
 	
@@ -18,7 +19,7 @@ public class Boletin {
 	 * 
 	 */
 	public Boletin(){
-		listaNoticias = new ArrayList<Noticia>();
+		this.listaNoticias = new ArrayList<Noticia>();
 	}
 
 	
@@ -31,7 +32,13 @@ public class Boletin {
 	 * @throws IllegalArgumentException Si la lista de noticias contiene alguna repetida.
 	 */
 	public Boletin(ArrayList<Noticia> listaNoticias) {
-		this.listaNoticias = listaNoticias;
+		if(listaNoticias.equals(null) || listaNoticias.contains(null)) 
+			throw new IllegalArgumentException("La lista o es nula o contiene nulos");
+		
+		this.listaNoticias = new ArrayList<Noticia>();
+		for(Noticia n : listaNoticias){
+			addNoticia(n);
+		}
 	}
 
 	
@@ -41,9 +48,7 @@ public class Boletin {
 	 * @return valor Valor de verdad que nos indica si el boletin esta vacio.
 	 */
 	public boolean esVacio() {
-		// TODO Auto-generated method stub
-		return false; //Al tener una fake implementation y ser de tipo boolean tendremos casos
-					  //en los que los test den verde
+		return listaNoticias.isEmpty();
 	}
 
 	
@@ -55,7 +60,9 @@ public class Boletin {
 	 * @throws IllegalArgumentException Si la noticia recibida ya pertenece al boletin.
 	 */
 	public void addNoticia(Noticia noticia) {
-		// TODO Auto-generated method stub
+		if(noticia == null ||listaNoticias.contains(noticia))
+			throw new IllegalArgumentException();
+		listaNoticias.add(noticia);
 	}
 
 	
@@ -67,9 +74,9 @@ public class Boletin {
 	 * @throws IllegalArgumentException Si la noticia recibida es null.
 	 */
 	public boolean contiene(Noticia noticia) {
-		// TODO Auto-generated method stub
-		return false; //Al tener una fake implementation y ser de tipo boolean tendremos casos
-		  			  //en los que los test den verde
+		if(noticia == null) throw new IllegalArgumentException("Argumento tiene valor nulo");
+		
+		return listaNoticias.contains(noticia);
 	}
 
 	
@@ -79,8 +86,7 @@ public class Boletin {
 	 * @return cantidad Cantidad de noticias en @this
 	 */
 	public int cantidadNoticias() {
-		// TODO Auto-generated method stub
-		return -1;
+		return listaNoticias.size();
 	}
 
 	
@@ -92,8 +98,24 @@ public class Boletin {
 	 * @throws IllegalStateException En caso de que el boletin se encuentre vacio.
 	 */
 	public Noticia getMasActual() throws IllegalStateException {
-		// TODO Auto-generated method stub
-		return null;
+		if(listaNoticias.isEmpty()) throw new IllegalStateException("El boletin no puede estar vacío");
+		
+		Calendar date = new GregorianCalendar();
+		
+		int result = 0;
+		long minDiff = Math.abs(listaNoticias.get(0).getFechaPublicacion().getTimeInMillis() 
+				- date.getTimeInMillis());
+		
+		for (Noticia n : listaNoticias){
+			long tmpDiff = Math.abs(n.getFechaPublicacion().getTimeInMillis() 
+					- date.getTimeInMillis());
+			if(tmpDiff < minDiff){
+				result = listaNoticias.indexOf(n);
+				minDiff = tmpDiff;
+			}
+		}		
+		
+		return listaNoticias.get(result);
 	}
 
 	
@@ -105,8 +127,24 @@ public class Boletin {
 	 * @throws IllegalStateException En caso de que el boletin se encuentre vacio.
 	 */
 	public Noticia getMenosActual() throws IllegalStateException {
-		// TODO Auto-generated method stub
-		return null;
+		if(listaNoticias.isEmpty()) throw new IllegalStateException("El boletin no puede estar vacío");
+		
+		Calendar date = new GregorianCalendar();
+		
+		int result = 0;
+		long maxDiff = Math.abs(listaNoticias.get(0).getFechaPublicacion().getTimeInMillis() 
+				- date.getTimeInMillis());
+		
+		for (Noticia n : listaNoticias){
+			long tmpDiff = Math.abs(n.getFechaPublicacion().getTimeInMillis() 
+					- date.getTimeInMillis());
+			if(tmpDiff > maxDiff){
+				result = listaNoticias.indexOf(n);
+				maxDiff = tmpDiff;
+			}
+		}		
+		
+		return listaNoticias.get(result);
 	}
 
 	
@@ -116,9 +154,24 @@ public class Boletin {
 	 * 
 	 * @return list Lista ordenada cronologicamente.
 	 */
-	public ArrayList<Noticia> listarCronologicamente() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Noticia> listarCronologicamente()  {
+		ArrayList<Noticia> result = new ArrayList<Noticia>();
+		
+		while(result.size() != listaNoticias.size()){
+			int morePrevious = listaNoticias.size();
+			
+			for(Noticia n : listaNoticias){
+				if(!result.contains(n) && morePrevious == listaNoticias.size())
+					morePrevious = listaNoticias.indexOf(n);
+				else if(!result.contains(n) && n.comparar(listaNoticias.get(morePrevious))
+						.equals(EnumPrecedencia.ANTERIOR))
+					morePrevious = listaNoticias.indexOf(n);
+			}
+			
+			result.add(listaNoticias.get(morePrevious));
+		}
+		
+		return result;
 	}
 
 	
@@ -129,8 +182,23 @@ public class Boletin {
 	 * @return list Lista ordenada por categorias.
 	 */
 	public ArrayList<Noticia> listarPorCategoria() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Noticia> result = new ArrayList<Noticia>();
+		
+		while(result.size() != listaNoticias.size()){
+			int morePrevious = listaNoticias.size();
+			
+			for(Noticia n : listaNoticias){
+				if(!result.contains(n) && morePrevious == listaNoticias.size())
+					morePrevious = listaNoticias.indexOf(n);
+				else if(!result.contains(n) && n.getCategoria().getValue() < 
+						listaNoticias.get(morePrevious).getCategoria().getValue())
+					morePrevious = listaNoticias.indexOf(n);
+			}
+			
+			result.add(listaNoticias.get(morePrevious));
+		}
+		
+		return result;
 	}
 
 	
@@ -140,8 +208,7 @@ public class Boletin {
 	 * @return list Lista de noticias de @this
 	 */
 	public ArrayList<Noticia> getLista() {
-		// TODO Auto-generated method stub
-		return null;
+		return listaNoticias;
 	}
 
 
@@ -156,8 +223,16 @@ public class Boletin {
 	 * @throws IllegalArgumentException Si la noticia es null.
 	 */
 	public ArrayList<Noticia> getListaSimilares(Noticia noticia) {
-		// TODO Auto-generated method stub
-		return null;
+		if(noticia == null || !listaNoticias.contains(noticia)) throw new IllegalArgumentException();
+		
+		ArrayList<Noticia> result = new ArrayList<Noticia>();
+		
+		for(Noticia n : listaNoticias){
+			if(n.similar(noticia))
+				result.add(n);
+		}
+		
+		return result;
 	}
 	
 	
@@ -170,8 +245,18 @@ public class Boletin {
 	 * @throws IllegalArgumentException Si el GregorianCalendar reecibido es null.
 	 */
 	public Boletin subConjunto(GregorianCalendar fecha) {
-		// TODO Auto-generated method stub
-		return null;
+		if(fecha == null) throw new IllegalArgumentException("La fecha introducida es null");
+		
+		Boletin subBoletin = new Boletin();
+		
+		for(Noticia n : getLista()){
+			long diff = n.getFechaPublicacion().getTimeInMillis() - fecha.getTimeInMillis();
+			if(TimeUnit.MILLISECONDS.toDays(Math.abs(diff)) < 1){
+				subBoletin.addNoticia(n);
+			}
+		}
+		
+		return subBoletin;
 	}
 	
 	
@@ -186,8 +271,27 @@ public class Boletin {
 	 * @throws IllegalArgumentException Si alguno de sus argumentos es null.
 	 */
 	public Boletin subConjunto(GregorianCalendar fechaEntrada, GregorianCalendar fechaFin) {
-		// TODO Auto-generated method stub
-		return null;
+		if(fechaEntrada == null || fechaFin == null)
+			throw new IllegalArgumentException("Argumentos erroneos o NULL");
+		
+		long fEntrada = fechaEntrada.getTimeInMillis();
+		long fFin = fechaFin.getTimeInMillis();
+		
+		if(fFin < fEntrada){
+			long tmp = fFin;
+			fFin = fEntrada;
+			fEntrada = tmp;
+		}
+		
+		Boletin subBoletin = new Boletin();
+		
+		for(Noticia n : getLista()){
+			if((n.getFechaPublicacion().getTimeInMillis() >= fEntrada) &&
+					n.getFechaPublicacion().getTimeInMillis() <= fFin)
+				subBoletin.addNoticia(n);
+		}
+		
+		return subBoletin;
 	}
 	
 	
@@ -199,8 +303,16 @@ public class Boletin {
 	 * @return boletin Boletin que tiene un subconjunto de noticias del original.
 	 */
 	public Boletin subConjunto(EnumCategoria categoria) {
-		// TODO Auto-generated method stub
-		return null;
+		if(categoria == null)
+			throw new IllegalArgumentException("Argumentos erroneos o NULL");
+		
+		Boletin subBoletin = new Boletin();
+		
+		for(Noticia n : getLista())
+			if(n.getCategoria().equals(categoria))
+				subBoletin.addNoticia(n);
+		
+		return subBoletin;
 	}
 	
 	
@@ -214,8 +326,19 @@ public class Boletin {
 	 * @throws IllegalArgumentException Si la fecha tienen un valor null.
 	 */
 	public Boletin subConjunto(GregorianCalendar fecha, EnumCategoria categoria) {
-		// TODO Auto-generated method stub
-		return null;
+		if(fecha == null || categoria == null)
+			throw new IllegalArgumentException("Argumentos erroneos o NULL");
+		
+		Boletin subBoletin = new Boletin();
+		
+		for(Noticia n : getLista()){
+			long diff = n.getFechaPublicacion().getTimeInMillis() - fecha.getTimeInMillis();
+			if((TimeUnit.MILLISECONDS.toDays(Math.abs(diff)) < 1) &&
+					n.getCategoria().equals(categoria))
+				subBoletin.addNoticia(n);
+		}
+		
+		return subBoletin;
 	}
 	
 	
@@ -231,7 +354,44 @@ public class Boletin {
 	 */
 	public Boletin subConjunto(GregorianCalendar fechaEntrada, GregorianCalendar fechaFin,
 			EnumCategoria categoria) {
-		// TODO Auto-generated method stub
-		return null;
+		if(fechaEntrada == null || fechaFin == null || categoria == null)
+			throw new IllegalArgumentException("Argumentos erroneos o NULL");
+		
+		long fEntrada = fechaEntrada.getTimeInMillis();
+		long fFin = fechaFin.getTimeInMillis();
+		
+		if(fFin < fEntrada){
+			long tmp = fFin;
+			fFin = fEntrada;
+			fEntrada = tmp;
+		}
+		
+		Boletin subBoletin = new Boletin();
+		
+		for(Noticia n : getLista()){
+			if((n.getFechaPublicacion().getTimeInMillis() >= fEntrada) &&
+					(n.getFechaPublicacion().getTimeInMillis() <= fFin) &&
+					n.getCategoria().equals(categoria))
+				subBoletin.addNoticia(n);
+		}
+		
+		return subBoletin;
+	}
+	
+	
+	/**
+	 * Reimplementación del metodo equals de object para nuestra clase Boletin
+	 * 
+	 * @param arg Objeto de tipo Boletin a ser comparado con @this
+	 * @return result True si es el mismo Boletin y False si no lo es
+	 */
+	@Override
+	public boolean equals(Object arg){
+		if(arg == null) return super.equals(arg);
+		Boletin boletin = (Boletin) arg;
+		
+		if(getLista().equals(boletin.getLista())) return true;
+		
+		return false;
 	}
 }

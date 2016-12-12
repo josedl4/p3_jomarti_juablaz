@@ -15,7 +15,7 @@ import uva.equipo02.p3_jomarti_juablaz.Noticia;
 
 public class BoletinTest {
 
-	private Noticia noticiaAux1, noticiaAux2, noticiaDelBoletinAux;
+	private Noticia noticiaAux1, noticiaAux2, noticiaDelBoletinAux, noticiaDelBoletinAux2;
 	private URL urlN1, urlN2;
 	private Boletin boletinConNoticias;
 
@@ -35,8 +35,9 @@ public class BoletinTest {
 		
 		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
 				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 1),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
+		noticiaDelBoletinAux2 = new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 1),
+				"Mi fuente", urlN1, EnumCategoria.ECONOMIA);
+		listaNoticias.add(noticiaDelBoletinAux2);
 		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 7, 3),
 				"Mi fuente", urlN1, EnumCategoria.NACIONAL));
 		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 8, 3),
@@ -174,7 +175,7 @@ public class BoletinTest {
 		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 1),
 				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
 		
-		assertEquals(listaNoticias, boletinConNoticias.getListaSimilares(noticiaDelBoletinAux));
+		assertEquals(listaNoticias, boletinConNoticias.getListaSimilares(noticiaDelBoletinAux2));
 	}
 	
 	
