@@ -1,7 +1,7 @@
 package uva.equipo02.p3_jomarti_juablaz;
 
 import java.util.GregorianCalendar;
-
+import java.util.concurrent.TimeUnit;
 import java.net.URL;
 
 
@@ -9,7 +9,6 @@ import java.net.URL;
  * Representacion de una noticia.
  *
  */
-@SuppressWarnings("unused")
 public class Noticia {
 	private String titular;
 	private GregorianCalendar fechaPublicacion;
@@ -40,6 +39,12 @@ public class Noticia {
 	 * @throws IllegalArgumentException La fuente es vacia.
 	 */
 	public Noticia(String titular, GregorianCalendar fechaPublicacion, String fuente, URL url, EnumCategoria categoria){
+		String[] palabras = titular.split(" ");
+		if((titular == null) || (palabras.length == 0) || (palabras.length > 13)
+				|| (fechaPublicacion == null) || (categoria == null) || (url == null)
+				|| (fuente == null) || fuente.equals(""))
+			throw new IllegalArgumentException("Los parametros para crear la noticia no son correctos");
+		
 		this.titular = titular;
 		this.fechaPublicacion = fechaPublicacion;
 		this.fuente = fuente;
@@ -54,8 +59,7 @@ public class Noticia {
 	 * @return titular Titular de @this
 	 */
 	public String getTitular() {
-		// TODO Auto-generated method stub
-		return null;
+		return titular;
 	}
 
 	
@@ -65,8 +69,7 @@ public class Noticia {
 	 * @return fechaPublicacion Fecha de @this
 	 */
 	public GregorianCalendar getFechaPublicacion() {
-		// TODO Auto-generated method stub
-		return null;
+		return fechaPublicacion;
 	}
 
 	
@@ -76,8 +79,7 @@ public class Noticia {
 	 * @return fuente Fuente de @this
 	 */
 	public String getFuente() {
-		// TODO Auto-generated method stub
-		return null;
+		return fuente;
 	}
 
 	
@@ -87,8 +89,7 @@ public class Noticia {
 	 * @return url URL de @this
 	 */
 	public URL getURL() {
-		// TODO Auto-generated method stub
-		return null;
+		return url;
 	}
 
 	
@@ -98,8 +99,7 @@ public class Noticia {
 	 * @return enumCategoria Categoria de @this
 	 */
 	public EnumCategoria getCategoria() {
-		// TODO Auto-generated method stub
-		return null;
+		return categoria;
 	}
 
 	
@@ -113,8 +113,20 @@ public class Noticia {
 	 * @throws IllegalArgumentException Noticia es null.
 	 */
 	public EnumPrecedencia comparar(Noticia noticia) {
-		// TODO Auto-generated method stub
-		return null;
+		if(noticia == null) throw new IllegalArgumentException("Noticia introduccida es null");
+		
+		if((getFechaPublicacion().get(GregorianCalendar.YEAR) == 
+				noticia.getFechaPublicacion().get(GregorianCalendar.YEAR)) &&
+				(getFechaPublicacion().get(GregorianCalendar.MONTH) ==
+				noticia.getFechaPublicacion().get(GregorianCalendar.MONTH)) &&
+				(getFechaPublicacion().get(GregorianCalendar.DATE) ==
+				noticia.getFechaPublicacion().get(GregorianCalendar.DATE)))
+			return EnumPrecedencia.IGUAL;
+		
+		if(getFechaPublicacion().before(noticia.getFechaPublicacion()))
+			return EnumPrecedencia.ANTERIOR;
+		else
+			return EnumPrecedencia.POSTERIOR;
 	}
 
 	
@@ -130,9 +142,17 @@ public class Noticia {
 	 * @throws IllegalArgumentException Noticia es null.
 	 */
 	public boolean similar(Noticia noticia) {
-		// TODO Auto-generated method stub
+		if(noticia == null) throw new IllegalArgumentException("Noticia introduccida es null");
+		
+		long diff = getFechaPublicacion().getTimeInMillis() - noticia.getFechaPublicacion().getTimeInMillis();
+		
+		long daysDiff = TimeUnit.MILLISECONDS.toDays(Math.abs(diff));
+		
+		if((getTitular().equals(noticia.getTitular())) && (getFuente().equals(noticia.getFuente()))
+				&& getCategoria().equals(noticia.getCategoria()) && daysDiff <= 2)
+			return true;
+		
 		return false;
 	}
-	
 	
 }
