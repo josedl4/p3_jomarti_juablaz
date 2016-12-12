@@ -1,6 +1,7 @@
 package uva.equipo02.p3_jomarti_juablaz;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 
@@ -18,7 +19,7 @@ public class Boletin {
 	 * 
 	 */
 	public Boletin(){
-		listaNoticias = new ArrayList<Noticia>();
+		this.listaNoticias = new ArrayList<Noticia>();
 	}
 
 	
@@ -31,6 +32,16 @@ public class Boletin {
 	 * @throws IllegalArgumentException Si la lista de noticias contiene alguna repetida.
 	 */
 	public Boletin(ArrayList<Noticia> listaNoticias) {
+		boolean similares=false;
+		if(listaNoticias.equals(null)) throw new IllegalArgumentException("La lista no puede contener nulos.");
+		for (int i = 0; i<listaNoticias.size() && similares == false;i++){
+			for(int j = 0; j<listaNoticias.size() && similares == false;j++){
+				if (j!=i)
+					System.out.println(similares);
+					similares = listaNoticias.get(i).similar(listaNoticias.get(j));
+			}
+		}
+		if(similares == false)throw new IllegalArgumentException("La lista no puede contener Noticias repetidas.");;
 		this.listaNoticias = listaNoticias;
 	}
 
@@ -41,9 +52,10 @@ public class Boletin {
 	 * @return valor Valor de verdad que nos indica si el boletin esta vacio.
 	 */
 	public boolean esVacio() {
-		// TODO Auto-generated method stub
-		return false; //Al tener una fake implementation y ser de tipo boolean tendremos casos
-					  //en los que los test den verde
+		if(listaNoticias.isEmpty())
+			return true;
+		else
+			return false; 
 	}
 
 	
@@ -55,7 +67,9 @@ public class Boletin {
 	 * @throws IllegalArgumentException Si la noticia recibida ya pertenece al boletin.
 	 */
 	public void addNoticia(Noticia noticia) {
-		// TODO Auto-generated method stub
+		if(noticia.equals(null)) throw new IllegalArgumentException("La noticia no puede ser nula.");
+		if(contiene(noticia))throw new IllegalArgumentException("La noticia no puede pertenecer al boletín.");;
+		listaNoticias.add(noticia);
 	}
 
 	
@@ -67,9 +81,12 @@ public class Boletin {
 	 * @throws IllegalArgumentException Si la noticia recibida es null.
 	 */
 	public boolean contiene(Noticia noticia) {
-		// TODO Auto-generated method stub
-		return false; //Al tener una fake implementation y ser de tipo boolean tendremos casos
-		  			  //en los que los test den verde
+		boolean contiene = false;
+		if(noticia.equals(null))throw new IllegalArgumentException("La noticia no puede ser nula");;
+		for(int i = 0; i<listaNoticias.size() && contiene == false;i++){
+			contiene = listaNoticias.get(i).similar(noticia);
+		}
+		return contiene;
 	}
 
 	
@@ -79,8 +96,7 @@ public class Boletin {
 	 * @return cantidad Cantidad de noticias en @this
 	 */
 	public int cantidadNoticias() {
-		// TODO Auto-generated method stub
-		return -1;
+		return listaNoticias.size();
 	}
 
 	
@@ -92,8 +108,16 @@ public class Boletin {
 	 * @throws IllegalStateException En caso de que el boletin se encuentre vacio.
 	 */
 	public Noticia getMasActual() throws IllegalStateException {
-		// TODO Auto-generated method stub
-		return null;
+		if(listaNoticias.isEmpty()) throw new IllegalStateException("El boletin no puede estar vacío");
+		Calendar fecha = new GregorianCalendar();
+		int valorIteracion=1;
+		for (int i =0; i< listaNoticias.size()-1;i++){
+			if(Math.abs(listaNoticias.get(i).getFechaPublicacion().getTimeInMillis()-
+					fecha.getTimeInMillis())<Math.abs(listaNoticias.get(valorIteracion).getFechaPublicacion().
+							getTimeInMillis()-fecha.getTimeInMillis()))
+				valorIteracion=i; 
+		}		
+		return listaNoticias.get(valorIteracion);
 	}
 
 	
@@ -105,8 +129,19 @@ public class Boletin {
 	 * @throws IllegalStateException En caso de que el boletin se encuentre vacio.
 	 */
 	public Noticia getMenosActual() throws IllegalStateException {
-		// TODO Auto-generated method stub
-		return null;
+		if(listaNoticias.isEmpty()) throw new IllegalStateException("El boletin no puede estar vacío");
+		Calendar fecha = new GregorianCalendar();
+		int valorIteracion=1;
+		long valorResta =0;
+		for (int i =0; i< listaNoticias.size()-1;i++){
+			if(Math.abs(listaNoticias.get(i).getFechaPublicacion().getTimeInMillis()-
+					fecha.getTimeInMillis())>valorResta){
+				valorResta=Math.abs(listaNoticias.get(i).getFechaPublicacion().
+						getTimeInMillis()-fecha.getTimeInMillis());
+				valorIteracion=i; 
+			}
+		}		
+		return listaNoticias.get(valorIteracion);
 	}
 
 	
@@ -116,9 +151,17 @@ public class Boletin {
 	 * 
 	 * @return list Lista ordenada cronologicamente.
 	 */
-	public ArrayList<Noticia> listarCronologicamente() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Noticia> listarCronologicamente()  {
+		Boletin copia = null;
+		try {
+			copia = (Boletin) this.clone();
+		} catch (CloneNotSupportedException e){};
+		ArrayList<Noticia> listaNoticiasOrdenada = new ArrayList<Noticia>();
+		while(copia.listaNoticias.size()!=0){
+			listaNoticiasOrdenada.add(copia.getMenosActual());
+			copia.listaNoticias.remove(copia.getMenosActual());
+		}
+		return listaNoticiasOrdenada;
 	}
 
 	
