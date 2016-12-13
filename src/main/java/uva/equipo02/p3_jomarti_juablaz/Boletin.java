@@ -1,7 +1,6 @@
 package uva.equipo02.p3_jomarti_juablaz;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
@@ -100,18 +99,11 @@ public class Boletin {
 	public Noticia getMasActual() throws IllegalStateException {
 		if(listaNoticias.isEmpty()) throw new IllegalStateException("El boletin no puede estar vacío");
 		
-		Calendar date = new GregorianCalendar();
-		
 		int result = 0;
-		long minDiff = Math.abs(listaNoticias.get(0).getFechaPublicacion().getTimeInMillis() 
-				- date.getTimeInMillis());
 		
-		for (Noticia n : listaNoticias){
-			long tmpDiff = Math.abs(n.getFechaPublicacion().getTimeInMillis() 
-					- date.getTimeInMillis());
-			if(tmpDiff < minDiff){
+		for (Noticia n : getLista()){
+			if(getLista().get(result).comparar(n).equals(EnumPrecedencia.ANTERIOR)){
 				result = listaNoticias.indexOf(n);
-				minDiff = tmpDiff;
 			}
 		}		
 		
@@ -129,18 +121,11 @@ public class Boletin {
 	public Noticia getMenosActual() throws IllegalStateException {
 		if(listaNoticias.isEmpty()) throw new IllegalStateException("El boletin no puede estar vacío");
 		
-		Calendar date = new GregorianCalendar();
-		
 		int result = 0;
-		long maxDiff = Math.abs(listaNoticias.get(0).getFechaPublicacion().getTimeInMillis() 
-				- date.getTimeInMillis());
 		
-		for (Noticia n : listaNoticias){
-			long tmpDiff = Math.abs(n.getFechaPublicacion().getTimeInMillis() 
-					- date.getTimeInMillis());
-			if(tmpDiff > maxDiff){
+		for (Noticia n : getLista()){
+			if(getLista().get(result).comparar(n).equals(EnumPrecedencia.POSTERIOR)){
 				result = listaNoticias.indexOf(n);
-				maxDiff = tmpDiff;
 			}
 		}		
 		
@@ -393,5 +378,11 @@ public class Boletin {
 		if(getLista().equals(boletin.getLista())) return true;
 		
 		return false;
+	}
+	
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 }

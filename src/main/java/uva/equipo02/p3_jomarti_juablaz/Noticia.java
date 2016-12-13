@@ -178,4 +178,10 @@ public class Noticia {
 		
 		return false;
 	}
+	
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 }
