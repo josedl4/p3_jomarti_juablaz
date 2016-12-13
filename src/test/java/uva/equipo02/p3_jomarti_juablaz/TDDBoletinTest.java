@@ -13,7 +13,7 @@ import uva.equipo02.p3_jomarti_juablaz.Boletin;
 import uva.equipo02.p3_jomarti_juablaz.EnumCategoria;
 import uva.equipo02.p3_jomarti_juablaz.Noticia;
 
-public class BoletinTest {
+public class TDDBoletinTest {
 
 	private Noticia noticiaAux1, noticiaAux2, noticiaDelBoletinAux, noticiaDelBoletinAux2;
 	private URL urlN1, urlN2;
@@ -33,6 +33,8 @@ public class BoletinTest {
 	public void setUpBoletinListaNoticas() throws Exception {
 		ArrayList<Noticia> listaNoticias = new ArrayList<Noticia>();
 		
+		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 8, 3),
+				"Mi fuente", urlN1, EnumCategoria.DEPORTE));
 		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
 				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
 		noticiaDelBoletinAux2 = new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 1),
@@ -40,8 +42,6 @@ public class BoletinTest {
 		listaNoticias.add(noticiaDelBoletinAux2);
 		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 7, 3),
 				"Mi fuente", urlN1, EnumCategoria.NACIONAL));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 8, 3),
-				"Mi fuente", urlN1, EnumCategoria.DEPORTE));
 		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 6, 3),
 				"Mi fuente", urlN1, EnumCategoria.INTERNACIONAL));
 		noticiaDelBoletinAux = new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
@@ -241,4 +241,9 @@ public class BoletinTest {
 				new GregorianCalendar(2016, 11, 3), EnumCategoria.ECONOMIA));
 	}
 
+	
+	@Test
+	public void testEqualsBoletin() {
+		assertTrue(boletinConNoticias.equals(boletinConNoticias));
+	}
 }

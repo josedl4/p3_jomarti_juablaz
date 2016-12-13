@@ -193,4 +193,17 @@ public class NoticiaBlackBoxTest {
 	public void testNoticiaSimilarIncorrectoNull() {
 		noticiaAux1.similar(null);
 	}
+	
+	
+	@Test
+	public void testNotEquals() {
+		assertFalse(noticiaAux1.equals(noticiaAux2));
+	}
+	
+	
+	@Test
+	public void testEqualsToNull() {
+		assertFalse(noticiaAux1.equals(null));
+	}
+	
 }

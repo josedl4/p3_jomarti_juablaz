@@ -12,7 +12,7 @@ import uva.equipo02.p3_jomarti_juablaz.Noticia;
 import uva.equipo02.p3_jomarti_juablaz.EnumCategoria;
 import uva.equipo02.p3_jomarti_juablaz.EnumPrecedencia;
 
-public class NoticiaTest {
+public class TDDNoticiaTest {
 	private Noticia noticiaAux1, noticiaAux2;
 	private URL urlN1, urlN2;
 	
@@ -131,4 +131,10 @@ public class NoticiaTest {
 		assertEquals(noticiaAux1.similar(noticiaAux2), noticiaAux2.similar(noticiaAux1));
 	}	
 
+	
+	//###########################EQUALS#############################
+	@Test
+	public void testEqualsNoticias() {
+		assertTrue(noticiaAux1.equals(noticiaAux1));
+	}
 }

@@ -335,6 +335,7 @@ public class BoletinBlackBoxTest {
 				EnumCategoria.ECONOMIA);
 	}
 	
+	
 	@Test(expected=IllegalArgumentException.class)
 	public void testSubConjunto2y3FechaFinNull(){
 		GregorianCalendar cal = null;
@@ -344,12 +345,26 @@ public class BoletinBlackBoxTest {
 				EnumCategoria.ECONOMIA);
 	}
 	
+	
 	@Test(expected=IllegalArgumentException.class)
 	public void testSubConjunto2y3CategoriaNull(){
 		
 		@SuppressWarnings("unused")
 		Boletin subC = boletinConNoticias.subConjunto(new GregorianCalendar(2016, 11, 3), 
 				new GregorianCalendar(2016, 11, 1), null);
+	}
+	
+	
+	@Test
+	public void testNotEquals() {
+		Boletin boletinVacio = new Boletin();
+		assertFalse(boletinVacio.equals(boletinConNoticias));
+	}
+	
+	
+	@Test
+	public void testEqualsToNull() {
+		assertFalse(boletinConNoticias.equals(null));
 	}
 	// <<<
 }
