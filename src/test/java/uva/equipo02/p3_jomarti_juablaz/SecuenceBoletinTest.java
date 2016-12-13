@@ -49,8 +49,7 @@ public class SecuenceBoletinTest {
 	public void testSecuenciaCreacionBoletinVacioYaddNoticia(){
 		Boletin boletin = new Boletin();
 		boletin.addNoticia(noticiaAux1);	
-		Boletin boletinIgual = new Boletin();
-		boletinIgual.addNoticia(noticiaAux1);
+		Boletin boletinIgual = boletin.clone();
 		
 		boletin.esVacio();
 		boletin.contiene(noticiaAux1);
@@ -67,7 +66,7 @@ public class SecuenceBoletinTest {
 		boletin.subConjunto(new GregorianCalendar(2010, 1, 1), new GregorianCalendar(2010, 10, 1));
 		boletin.subConjunto(new GregorianCalendar(2010, 1, 1), new GregorianCalendar(2010, 10, 1), EnumCategoria.DEPORTE);
 		
-		assertTrue(boletin.equals(boletinIgual));
+		assertEquals(boletinIgual, boletin);
 	}
 	
 	@Test
@@ -123,7 +122,7 @@ public class SecuenceBoletinTest {
 		boletin.subConjunto(new GregorianCalendar(2010, 1, 1), new GregorianCalendar(2010, 10, 1));
 		boletin.subConjunto(new GregorianCalendar(2010, 1, 1), new GregorianCalendar(2010, 10, 1), EnumCategoria.DEPORTE);
 		
-		assertTrue(boletin.equals(boletinIgual));
+		assertEquals(boletinIgual, boletin);
 
 	}
 }

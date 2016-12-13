@@ -366,29 +366,5 @@ public class BoletinBlackBoxTest {
 	public void testEqualsToNull() {
 		assertFalse(boletinConNoticias.equals(null));
 	}
-	// <<<
-	
-	@Test
-	public void testSecuenciaCreacionBoletinVacio(){
-		Boletin boletin = new Boletin();
-		boletin.addNoticia(noticiaAux1);
-	}
-	
-	@Test
-	public void testSecuenciaCreacionBoletinListaNoticias(){
-		ArrayList<Noticia> listaNoticias = new ArrayList<Noticia>();
-		listaNoticias.add(noticiaAux1);
-		listaNoticias.add(noticiaAux2);
-		Boletin boletin = new Boletin(listaNoticias);
-		Noticia noticiaAux3 = new Noticia("El Titular Noticia Aux 3", new GregorianCalendar(2010, 1, 1),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA);
-		
-		
-		boletin.addNoticia(noticiaAux3);
-
-		
-		
-	}
-	
-	
+	// <<<	
 }
