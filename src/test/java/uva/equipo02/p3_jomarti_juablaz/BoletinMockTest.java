@@ -119,7 +119,20 @@ public class BoletinMockTest {
 		expect(noticiaDelBoletinAux.getCategoria()).andReturn(EnumCategoria.INTERNACIONAL).anyTimes();
 		listaNoticias.add(noticiaDelBoletinAux);
 		///
-		
+		expect(noticiaBoletin3.similar(noticiaBoletin1)).andReturn(false).anyTimes();
+		expect(noticiaBoletin3.similar(noticiaBoletin2)).andReturn(false).anyTimes();
+		expect(noticiaBoletin3.similar(noticiaBoletin3)).andReturn(true).anyTimes();
+		expect(noticiaBoletin3.similar(noticiaBoletin4)).andReturn(false).anyTimes();
+		expect(noticiaBoletin3.similar(noticiaDelBoletinAux)).andReturn(false).anyTimes();
+		expect(noticiaBoletin3.similar(noticiaDelBoletinAux2)).andReturn(false).anyTimes();
+		///
+		expect(noticiaDelBoletinAux2.similar(noticiaBoletin1)).andReturn(false).anyTimes();
+		expect(noticiaDelBoletinAux2.similar(noticiaBoletin2)).andReturn(true).anyTimes();
+		expect(noticiaDelBoletinAux2.similar(noticiaBoletin3)).andReturn(false).anyTimes();
+		expect(noticiaDelBoletinAux2.similar(noticiaBoletin4)).andReturn(false).anyTimes();
+		expect(noticiaDelBoletinAux2.similar(noticiaDelBoletinAux)).andReturn(false).anyTimes();
+		expect(noticiaDelBoletinAux2.similar(noticiaDelBoletinAux2)).andReturn(true).anyTimes();		
+		///
 		boletinConNoticias = new Boletin(listaNoticias);
 		
 		
@@ -298,21 +311,7 @@ public class BoletinMockTest {
 		listaNoticias.add(noticiaDelBoletinAux2);
 		listaNoticias.add(noticiaBoletin2);
 		listaNoticias.add(noticiaDelBoletinAux);
-		/*
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 6, 3),
-				"Mi fuente", urlN1, EnumCategoria.INTERNACIONAL));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 7, 3),
-				"Mi fuente", urlN1, EnumCategoria.NACIONAL));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 8, 3),
-				"Mi fuente", urlN1, EnumCategoria.DEPORTE));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 1),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));		
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));	
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
-				"Mi fuente", urlN1, EnumCategoria.INTERNACIONAL));*/
 		
-		//
 		
 		assertEquals(listaNoticias, boletinConNoticias.listarCronologicamente());
 	}
@@ -339,18 +338,13 @@ public class BoletinMockTest {
 		// Creamos el resultado esperado a traves de las especificaciones
 		ArrayList<Noticia> listaNoticias = new ArrayList<Noticia>();
 		
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 7, 3),
-				"Mi fuente", urlN1, EnumCategoria.NACIONAL));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 6, 3),
-				"Mi fuente", urlN1, EnumCategoria.INTERNACIONAL));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
-				"Mi fuente", urlN1, EnumCategoria.INTERNACIONAL));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 1),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));		
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 8, 3),
-				"Mi fuente", urlN1, EnumCategoria.DEPORTE));
+		listaNoticias.add(noticiaBoletin3);
+		listaNoticias.add(noticiaBoletin4);
+		listaNoticias.add(noticiaDelBoletinAux);
+		listaNoticias.add(noticiaBoletin2);
+		listaNoticias.add(noticiaDelBoletinAux2);
+		listaNoticias.add(noticiaBoletin1);
+		
 		//---
 		
 		// Comprobamos que la lista obtenida sea igual a la esperada
@@ -361,11 +355,8 @@ public class BoletinMockTest {
 	@Test
 	public void testListarNoticiaSimilares() {
 		ArrayList<Noticia> listaNoticias = new ArrayList<Noticia>();
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 1),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
-		
+		listaNoticias.add(noticiaBoletin2);
+		listaNoticias.add(noticiaDelBoletinAux2);
 		assertEquals(listaNoticias, boletinConNoticias.getListaSimilares(noticiaDelBoletinAux2));
 	}
 	
@@ -373,11 +364,9 @@ public class BoletinMockTest {
 	@Test
 	public void testListarNoticiaSimilaresSinSimilares() {
 		ArrayList<Noticia> listaNoticias = new ArrayList<Noticia>();
-		Noticia noticia = new Noticia("Este es mi titular", new GregorianCalendar(2016, 7, 3),
-				"Mi fuente", urlN1, EnumCategoria.NACIONAL);
-		listaNoticias.add(noticia);
+		listaNoticias.add(noticiaBoletin3);
 		
-		assertEquals(listaNoticias, boletinConNoticias.getListaSimilares(noticia));
+		assertEquals(listaNoticias, boletinConNoticias.getListaSimilares(noticiaBoletin3));
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -394,10 +383,8 @@ public class BoletinMockTest {
 	@Test
 	public void testSubConjunto1(){
 		ArrayList<Noticia> listaNoticias = new ArrayList<Noticia>();
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
-				"Mi fuente", urlN1, EnumCategoria.INTERNACIONAL));
+		listaNoticias.add(noticiaBoletin2);
+		listaNoticias.add(noticiaDelBoletinAux);
 		
 		Boletin subC = new Boletin(listaNoticias);
 		assertEquals(subC, boletinConNoticias.subConjunto(new GregorianCalendar(2016, 11, 3)));
@@ -424,12 +411,9 @@ public class BoletinMockTest {
 	@Test
 	public void testSubConjunto2(){
 		ArrayList<Noticia> listaNoticias = new ArrayList<Noticia>();
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 1),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
-				"Mi fuente", urlN1, EnumCategoria.INTERNACIONAL));
+		listaNoticias.add(noticiaBoletin2);
+		listaNoticias.add(noticiaDelBoletinAux2);
+		listaNoticias.add(noticiaDelBoletinAux);
 		
 		Boletin subC = new Boletin(listaNoticias);
 		assertEquals(subC, boletinConNoticias.subConjunto(new GregorianCalendar(2016, 11, 1), new GregorianCalendar(2016, 11, 3)));
@@ -439,12 +423,9 @@ public class BoletinMockTest {
 	@Test
 	public void testSubConjunto2FechasDesordenadas(){
 		ArrayList<Noticia> listaNoticias = new ArrayList<Noticia>();
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 1),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
-				"Mi fuente", urlN1, EnumCategoria.INTERNACIONAL));
+		listaNoticias.add(noticiaBoletin2);
+		listaNoticias.add(noticiaDelBoletinAux2);
+		listaNoticias.add(noticiaDelBoletinAux);
 		
 		Boletin subC = new Boletin(listaNoticias);
 		assertEquals(subC, boletinConNoticias.subConjunto(new GregorianCalendar(2016, 11, 3),
@@ -480,10 +461,9 @@ public class BoletinMockTest {
 	@Test
 	public void testSubConjunto3(){
 		ArrayList<Noticia> listaNoticias = new ArrayList<Noticia>();
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 1),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
+		listaNoticias.add(noticiaBoletin2);
+		listaNoticias.add(noticiaDelBoletinAux2);
+		
 		Boletin subC = new Boletin(listaNoticias);
 		assertEquals(subC, boletinConNoticias.subConjunto(EnumCategoria.ECONOMIA));
 	}
@@ -509,8 +489,7 @@ public class BoletinMockTest {
 	@Test
 	public void testSubConjunto1y3(){
 		Boletin subC = new Boletin();
-		subC.addNoticia(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
+		subC.addNoticia(noticiaBoletin2);
 		assertEquals(subC, boletinConNoticias.subConjunto(new GregorianCalendar(2016, 11, 3),
 				EnumCategoria.ECONOMIA));
 	}
@@ -547,10 +526,8 @@ public class BoletinMockTest {
 	@Test
 	public void testSubConjunto2y3(){
 		ArrayList<Noticia> listaNoticias = new ArrayList<Noticia>();
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 1),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
+		listaNoticias.add(noticiaBoletin2);
+		listaNoticias.add(noticiaDelBoletinAux2);
 		
 		Boletin subC = new Boletin(listaNoticias);
 		assertEquals(subC, boletinConNoticias.subConjunto(new GregorianCalendar(2016, 11, 1),
@@ -561,10 +538,8 @@ public class BoletinMockTest {
 	@Test
 	public void testSubConjunto2y3FechasDesordenadas(){
 		ArrayList<Noticia> listaNoticias = new ArrayList<Noticia>();
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 1),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
+		listaNoticias.add(noticiaBoletin2);
+		listaNoticias.add(noticiaDelBoletinAux2);
 		
 		Boletin subC = new Boletin(listaNoticias);
 		assertEquals(subC, boletinConNoticias.subConjunto(new GregorianCalendar(2016, 11, 3),
