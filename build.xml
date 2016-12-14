@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="p3_jomarti_juablaz" default="init" basedir="./">
+  	<property environment="env"/>
+	<property name="junit.output.dir" value="junit"/>
+	<property name="debuglevel" value="source,lines,vars"/>
+	<property name="target" value="1.8"/>
+	<property name="source" value="1.8"/>
+
+	<path id="Maven Dependencies.libraryclasspath">
+	        <pathelement location="lib/junit-4.12.jar"/>
+	        <pathelement location="lib/hamcrest-core-1.3.jar"/>
+	        <pathelement location="lib/easymock-3.4.jar"/>
+	        <pathelement location="lib/objenesis-2.2.jar"/>
+	</path>
+	<path id="p3_jomarti_juablaz.classpath">
+	        <pathelement location="target/classes"/>
+	        <pathelement location="target/test-classes"/>
+	        <path refid="Maven Dependencies.libraryclasspath"/>
+	</path>
+
+	<!-- Add here test classpath -->
+
+	<path id="run.AllTests.classpath">
+        <path refid="p3_jomarti_juablaz.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+	</path>
+	<path id="run.BoletinBlackBoxTest.classpath">
+        <path refid="p3_jomarti_juablaz.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+	</path>
+	<path id="run.NoticiaBlackBoxTest.classpath">
+        <path refid="p3_jomarti_juablaz.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+	</path>
+	<path id="run.SequenceBoletinTest.classpath">
+        <path refid="p3_jomarti_juablaz.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+	</path>
+	<path id="run.TDDBoletinTest.classpath">
+        <path refid="p3_jomarti_juablaz.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+	</path>
+	<path id="run.TDDNoticiaTest.classpath">
+        <path refid="p3_jomarti_juablaz.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+	</path>
+
+	<!-- ======================= -->
+
+	<!-- ====== Targets ======== -->
+
+	<target name="init">
+        <mkdir dir="target/classes"/>
+        <mkdir dir="target/test-classes"/>
+        <copy includeemptydirs="false" todir="target/classes"> 			<!-- Copiamos estructura de paquetes de las clases en target -->
+            <fileset dir="src/main/java">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="target/test-classes">		<!-- Copiamos estructura de paquetes de los test en target -->
+            <fileset dir="src/test/java">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+
+
+	<target name="limpiar">
+        <delete dir="target/classes"/>
+        <delete dir="target/test-classes"/>
+		<delete dir="junit"/>
+    </target>
+
+
+	<target depends="limpiar, compilar-project" name="compilar"/>
+
+
+	<target depends="init" name="compilar-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src/main/java"/>
+            <classpath refid="p3_jomarti_juablaz.classpath"/>
+        </javac>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="target/test-classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src/test/java"/>
+            <classpath refid="p3_jomarti_juablaz.classpath"/>
+        </javac>
+    </target>
+
+
+	<target description="Compile all projects which reference this project. Useful to propagate changes." name="compilar-refprojects"/>
+
+
+	<target name="ejecutar" depends="compilar">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="uva.equipo02.p3_jomarti_juablaz.AllTests" todir="${junit.output.dir}"/>
+            <classpath refid="run.AllTests.classpath"/>
+        </junit>
+    </target>
+
+
+	<target name="ejecutarTestsTDD" depends="compilar">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="uva.equipo02.p3_jomarti_juablaz.TDDBoletinTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.TDDBoletinTest.classpath"/>
+        </junit>
+		<junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="uva.equipo02.p3_jomarti_juablaz.TDDNoticiaTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.TDDNoticiaTest.classpath"/>
+        </junit>
+    </target>
+
+
+	<target name="ejecutarTestEnAislamiento" depends="compilar">
+		<echo message="Aun no habilitado"></echo> <!--
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+        	<formatter type="xml"/>
+            <test name="uva.equipo02.p3_jomarti_juablaz.BoletinMockTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.BoletinMockTest.classpath"/>
+        </junit> -->
+    </target>
+
+
+	<target name="ejecutarTestDeSecuencia" depends="compilar">
+		<echo message="Aun no habilitado"></echo> <!--
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+        	<formatter type="xml"/>
+            <test name="uva.equipo02.p3_jomarti_juablaz.SequenceBoletinTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.SequenceBoletinTest.classpath"/>
+        </junit> -->
+    </target>
+	
+
+	<target name="obtenerInformeCobertura" depends="ejecutar">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
+    </target>
+
+
+	<target name="documentar" depends="compilar">
+		<javadoc sourcepath="src/main/java" destdir="doc/classes">
+    		<classpath refid="p3_jomarti_juablaz.classpath"/>
+		</javadoc>
+		<javadoc sourcepath="src/test/java" destdir="doc/test-classes">
+        	<classpath refid="p3_jomarti_juablaz.classpath"/>
+		</javadoc>
+    </target>
+	<!-- ======================= -->
+
+</project>
