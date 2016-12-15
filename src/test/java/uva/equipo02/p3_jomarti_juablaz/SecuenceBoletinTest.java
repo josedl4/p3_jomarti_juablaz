@@ -11,9 +11,8 @@ import org.junit.Test;
 
 public class SecuenceBoletinTest {
 
-	private Noticia noticiaAux1, noticiaAux2, noticiaDelBoletinAux;
+	private Noticia noticiaAux1, noticiaAux2;
 	private URL urlN1, urlN2;
-	private Boletin boletinConNoticias;
 	
 	@Before
 	public void setUpNoticiasAux() throws Exception {
@@ -25,26 +24,7 @@ public class SecuenceBoletinTest {
 				"Mi fuente", urlN2, EnumCategoria.ECONOMIA);
 	}
 	
-	@Before
-	public void setUpBoletinListaNoticas() throws Exception {
-		ArrayList<Noticia> listaNoticias = new ArrayList<Noticia>();
-		
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 1),
-				"Mi fuente", urlN1, EnumCategoria.ECONOMIA));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 7, 3),
-				"Mi fuente", urlN1, EnumCategoria.NACIONAL));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 8, 3),
-				"Mi fuente", urlN1, EnumCategoria.DEPORTE));
-		listaNoticias.add(new Noticia("Este es mi titular", new GregorianCalendar(2016, 6, 3),
-				"Mi fuente", urlN1, EnumCategoria.INTERNACIONAL));
-		noticiaDelBoletinAux = new Noticia("Este es mi titular", new GregorianCalendar(2016, 11, 3),
-				"Mi fuente", urlN1, EnumCategoria.INTERNACIONAL);
-		listaNoticias.add(noticiaDelBoletinAux);
-		
-		boletinConNoticias = new Boletin(listaNoticias);
-	}
+
 	@Test
 	public void noCambiaEstado(){
 		Boletin boletin = new Boletin();
@@ -69,61 +49,41 @@ public class SecuenceBoletinTest {
 		assertEquals(boletinCopy, boletin);
 	}
 	
+	
 	@Test
-	public void testSecuenciaCreacionBoletinListaNoticiasYaddNoticia(){
-		ArrayList<Noticia> listaNoticias = new ArrayList<Noticia>();
-		listaNoticias.add(noticiaAux1);
-		listaNoticias.add(noticiaAux2);
-		Boletin boletin = new Boletin(listaNoticias);
-		Noticia noticiaAux3 = new Noticia("El Titular Noticia Aux 3", new GregorianCalendar(2010, 1, 1),
-				"Mi fuente alternativa", urlN1, EnumCategoria.DEPORTE);
-		
+	public void testCambiaEstadoBoletinVacio(){
+		Boletin boletin = new Boletin();
 		Boletin boletinCopy = Boletin.cloneBoletin(boletin);
 		
-		boletin.addNoticia(noticiaAux3);		
-		boletinCopy.addNoticia(noticiaAux3);
+		boletin.addNoticia(noticiaAux1);
 		
-		boletin.esVacio();
-		boletin.contiene(noticiaAux3);
-		boletin.cantidadNoticias();
-		boletin.getMasActual();
-		boletin.getMenosActual();
-		boletin.listarCronologicamente();
-		boletin.listarPorCategoria();
-		boletin.getLista();
-		boletin.getListaSimilares(noticiaAux3);
-		boletin.subConjunto(EnumCategoria.DEPORTE);
-		boletin.subConjunto(new GregorianCalendar(2010, 1, 1));
-		boletin.subConjunto(new GregorianCalendar(2010, 1, 1), EnumCategoria.DEPORTE);
-		boletin.subConjunto(new GregorianCalendar(2010, 1, 1), new GregorianCalendar(2010, 10, 1));
-		boletin.subConjunto(new GregorianCalendar(2010, 1, 1), new GregorianCalendar(2010, 10, 1), EnumCategoria.DEPORTE);
-		assertTrue(boletin.equals(boletinCopy));
+		assertNotEquals(boletinCopy, boletin);
 	}
 	
 	@Test
-	public void testSecuenciaCreacionBoletinListaNoticias(){
+	public void testCambiaEstado(){
+		ArrayList<Noticia> listaNoticias = new ArrayList<Noticia>();
+		listaNoticias.add(noticiaAux1);
+		Boletin boletin = new Boletin(listaNoticias);
+		Boletin boletinCopy = Boletin.cloneBoletin(boletin);
+			
+		boletin.addNoticia(noticiaAux2);
+		
+		assertNotEquals(boletinCopy, boletin);
+	}
+	
+	@Test
+	public void testMismoEstadoDistintosConstructores(){
 		ArrayList<Noticia> listaNoticias = new ArrayList<Noticia>();
 		listaNoticias.add(noticiaAux1);
 		listaNoticias.add(noticiaAux2);
 		Boletin boletin = new Boletin(listaNoticias);
-		Boletin boletinIgual = new Boletin(listaNoticias);		
+		Boletin boletinCopy = new Boletin();
 		
-		boletin.esVacio();
-		boletin.contiene(noticiaAux1);
-		boletin.cantidadNoticias();
-		boletin.getMasActual();
-		boletin.getMenosActual();
-		boletin.listarCronologicamente();
-		boletin.listarPorCategoria();
-		boletin.getLista();
-		boletin.getListaSimilares(noticiaAux1);
-		boletin.subConjunto(EnumCategoria.DEPORTE);
-		boletin.subConjunto(new GregorianCalendar(2010, 1, 1));
-		boletin.subConjunto(new GregorianCalendar(2010, 1, 1), EnumCategoria.DEPORTE);
-		boletin.subConjunto(new GregorianCalendar(2010, 1, 1), new GregorianCalendar(2010, 10, 1));
-		boletin.subConjunto(new GregorianCalendar(2010, 1, 1), new GregorianCalendar(2010, 10, 1), EnumCategoria.DEPORTE);
+		boletinCopy.addNoticia(noticiaAux1);
+		boletinCopy.addNoticia(noticiaAux2);
 		
-		assertEquals(boletinIgual, boletin);
+		assertEquals(boletinCopy, boletin);
 
 	}
 }
