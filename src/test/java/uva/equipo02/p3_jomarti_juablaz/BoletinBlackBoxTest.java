@@ -358,13 +358,13 @@ public class BoletinBlackBoxTest {
 	@Test
 	public void testNotEquals() {
 		Boletin boletinVacio = new Boletin();
-		assertFalse(boletinVacio.equals(boletinConNoticias));
+		assertNotEquals(boletinVacio, boletinConNoticias);
 	}
 	
 	
 	@Test
 	public void testEqualsToNull() {
-		assertFalse(boletinConNoticias.equals(null));
+		assertNotEquals(boletinConNoticias, null);
 	}
 	// <<<	
 }

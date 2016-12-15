@@ -46,10 +46,10 @@ public class SecuenceBoletinTest {
 		boletinConNoticias = new Boletin(listaNoticias);
 	}
 	@Test
-	public void testSecuenciaCreacionBoletinVacioYaddNoticia(){
+	public void noCambiaEstado(){
 		Boletin boletin = new Boletin();
 		boletin.addNoticia(noticiaAux1);	
-		Boletin boletinIgual = boletin.clone();
+		Boletin boletinCopy = Boletin.cloneBoletin(boletin);
 		
 		boletin.esVacio();
 		boletin.contiene(noticiaAux1);
@@ -66,7 +66,7 @@ public class SecuenceBoletinTest {
 		boletin.subConjunto(new GregorianCalendar(2010, 1, 1), new GregorianCalendar(2010, 10, 1));
 		boletin.subConjunto(new GregorianCalendar(2010, 1, 1), new GregorianCalendar(2010, 10, 1), EnumCategoria.DEPORTE);
 		
-		assertEquals(boletinIgual, boletin);
+		assertEquals(boletinCopy, boletin);
 	}
 	
 	@Test
@@ -77,10 +77,11 @@ public class SecuenceBoletinTest {
 		Boletin boletin = new Boletin(listaNoticias);
 		Noticia noticiaAux3 = new Noticia("El Titular Noticia Aux 3", new GregorianCalendar(2010, 1, 1),
 				"Mi fuente alternativa", urlN1, EnumCategoria.DEPORTE);
-		boletin.addNoticia(noticiaAux3);
-	
-		Boletin boletinIgual = new Boletin(listaNoticias);
-		boletinIgual.addNoticia(noticiaAux3);
+		
+		Boletin boletinCopy = Boletin.cloneBoletin(boletin);
+		
+		boletin.addNoticia(noticiaAux3);		
+		boletinCopy.addNoticia(noticiaAux3);
 		
 		boletin.esVacio();
 		boletin.contiene(noticiaAux3);
@@ -96,7 +97,7 @@ public class SecuenceBoletinTest {
 		boletin.subConjunto(new GregorianCalendar(2010, 1, 1), EnumCategoria.DEPORTE);
 		boletin.subConjunto(new GregorianCalendar(2010, 1, 1), new GregorianCalendar(2010, 10, 1));
 		boletin.subConjunto(new GregorianCalendar(2010, 1, 1), new GregorianCalendar(2010, 10, 1), EnumCategoria.DEPORTE);
-		assertTrue(boletin.equals(boletinIgual));
+		assertTrue(boletin.equals(boletinCopy));
 	}
 	
 	@Test
