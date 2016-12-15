@@ -358,13 +358,25 @@ public class BoletinBlackBoxTest {
 	@Test
 	public void testNotEquals() {
 		Boletin boletinVacio = new Boletin();
-		assertFalse(boletinVacio.equals(boletinConNoticias));
+		assertNotEquals(boletinVacio, boletinConNoticias);
 	}
 	
 	
 	@Test
 	public void testEqualsToNull() {
-		assertFalse(boletinConNoticias.equals(null));
+		assertNotEquals(boletinConNoticias, null);
 	}
-	// <<<
+	
+	
+	@Test
+	public void testCloneBoletin() {
+		assertEquals(boletinConNoticias, Boletin.cloneBoletin(boletinConNoticias));
+	}
+	
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testCloneBoletinNullArg() {
+		Boletin.cloneBoletin(null);
+	}
+	// <<<	
 }

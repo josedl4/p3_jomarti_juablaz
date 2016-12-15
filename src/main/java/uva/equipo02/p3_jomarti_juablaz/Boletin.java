@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
  * Representacion de un boletin de noticias.
  *
  */
-public class Boletin {
+public class Boletin implements Cloneable {
 	private ArrayList<Noticia> listaNoticias;
 	
 	
@@ -148,8 +148,8 @@ public class Boletin {
 			for(Noticia n : listaNoticias){
 				if(!result.contains(n) && morePrevious == listaNoticias.size())
 					morePrevious = listaNoticias.indexOf(n);
-				else if(!result.contains(n) && n.comparar(listaNoticias.get(morePrevious))
-						.equals(EnumPrecedencia.ANTERIOR))
+				else if(!result.contains(n) && n.getFechaPublicacion().getTimeInMillis() 
+						< getLista().get(morePrevious).getFechaPublicacion().getTimeInMillis())
 					morePrevious = listaNoticias.indexOf(n);
 			}
 			
@@ -213,7 +213,7 @@ public class Boletin {
 		ArrayList<Noticia> result = new ArrayList<Noticia>();
 		
 		for(Noticia n : listaNoticias){
-			if(n.similar(noticia))
+			if(noticia.similar(n))
 				result.add(n);
 		}
 		
@@ -381,8 +381,10 @@ public class Boletin {
 	}
 	
 	
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
+	public static Boletin cloneBoletin(Boletin boletin){
+		if(boletin == null)
+			throw new IllegalArgumentException("Valor del boletin null");
+		
+		return new Boletin(boletin.getLista());
 	}
 }
