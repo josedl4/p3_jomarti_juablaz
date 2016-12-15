@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
  * Representacion de un boletin de noticias.
  *
  */
-public class Boletin {
+public class Boletin implements Cloneable {
 	private ArrayList<Noticia> listaNoticias;
 	
 	
@@ -381,8 +381,10 @@ public class Boletin {
 	}
 	
 	
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
+	public static Boletin cloneBoletin(Boletin boletin){
+		if(boletin == null)
+			throw new IllegalArgumentException("Valor del boletin null");
+		
+		return new Boletin(boletin.getLista());
 	}
 }
