@@ -44,7 +44,11 @@
         <path refid="p3_jomarti_juablaz.classpath"/>
         <path refid="Maven Dependencies.libraryclasspath"/>
 	</path>
-
+	<path id="run.BoletinMockTest.classpath">
+		<path refid="p3_jomarti_juablaz.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+	</path>
+	
 	<!-- ======================= -->
 
 	<!-- ======== OS =========== -->
@@ -173,28 +177,37 @@
             <test name="uva.equipo02.p3_jomarti_juablaz.TDDNoticiaTest" todir="${junit.output.dir}"/>
             <classpath refid="run.TDDNoticiaTest.classpath"/>
         </junit>
+		<junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="uva.equipo02.p3_jomarti_juablaz.TDDNoticiaTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.BoletinBlackBoxTest.classpath"/>
+        </junit>
+		<junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="uva.equipo02.p3_jomarti_juablaz.TDDNoticiaTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.NoticiaBlackBoxTest.classpath"/>
+        </junit>
     </target>
 
 
 	<target name="ejecutarTestEnAislamiento" depends="compilar">
-		<echo message="Aun no habilitado"></echo> <!--
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
         	<formatter type="xml"/>
             <test name="uva.equipo02.p3_jomarti_juablaz.BoletinMockTest" todir="${junit.output.dir}"/>
             <classpath refid="run.BoletinMockTest.classpath"/>
-        </junit> -->
+        </junit>
     </target>
 
 
 	<target name="ejecutarTestDeSecuencia" depends="compilar">
-		<echo message="Aun no habilitado"></echo> <!--
+		
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
         	<formatter type="xml"/>
             <test name="uva.equipo02.p3_jomarti_juablaz.SequenceBoletinTest" todir="${junit.output.dir}"/>
             <classpath refid="run.SequenceBoletinTest.classpath"/>
-        </junit> -->
+        </junit>
     </target>
 	
 
