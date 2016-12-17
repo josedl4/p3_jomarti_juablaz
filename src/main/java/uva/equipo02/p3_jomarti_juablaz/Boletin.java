@@ -102,7 +102,8 @@ public class Boletin implements Cloneable {
 		int result = 0;
 		
 		for (Noticia n : getLista()){
-			if(getLista().get(result).comparar(n).equals(EnumPrecedencia.ANTERIOR)){
+			if(getLista().get(result).getFechaPublicacion().getTimeInMillis() 
+					< n.getFechaPublicacion().getTimeInMillis()){
 				result = listaNoticias.indexOf(n);
 			}
 		}		
@@ -124,7 +125,8 @@ public class Boletin implements Cloneable {
 		int result = 0;
 		
 		for (Noticia n : getLista()){
-			if(getLista().get(result).comparar(n).equals(EnumPrecedencia.POSTERIOR)){
+			if(getLista().get(result).getFechaPublicacion().getTimeInMillis() 
+					> n.getFechaPublicacion().getTimeInMillis()){
 				result = listaNoticias.indexOf(n);
 			}
 		}		

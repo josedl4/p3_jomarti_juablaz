@@ -47,11 +47,73 @@
 
 	<!-- ======================= -->
 
+	<!-- ======== OS =========== -->
+	
+	<condition property="isWindows">
+	    <os family="windows" />
+	</condition>
+
+	<condition property="isUnix">
+	    <os family="unix" />
+	</condition>
+
+	<target name="all" depends="mvn_install_windows, mvn_install_unix"/>
+
+	<target name="mvn_install_windows" if="isWindows">
+	    <exec dir="." executable="cmd">
+	        <arg line="/c mvn clean install" />
+	    </exec>
+	</target>
+
+	<target name="mvn_install_unix" if="isUnix">
+	    <exec dir="." executable="sh">
+	        <arg line="-c 'mvn clean install'" />
+	    </exec>
+	</target>
+	
+	<target name="mvn_test_windows" if="isWindows">
+	    <exec dir="." executable="cmd">
+	        <arg line="/c mvn test" />
+	    </exec>
+	</target>
+
+	<target name="mvn_test_unix" if="isUnix">
+	    <exec dir="." executable="sh">
+	        <arg line="-c 'mvn test'" />
+	    </exec>
+	</target>
+	
+	<target name="mvn_cobertura_windows" if="isWindows">
+	    <exec dir="." executable="cmd">
+	        <arg line="/c mvn cobertura:cobertura" />
+	    </exec>
+	</target>
+
+	<target name="mvn_cobertura_unix" if="isUnix">
+	    <exec dir="." executable="sh">
+	        <arg line="-c 'mvn cobertura:cobertura'" />
+	    </exec>
+	</target>
+	
+	<target name="mvn_cc_windows" if="isWindows">
+	    <exec dir="." executable="cmd">
+	        <arg line="/c mvn javancss:report" />
+	    </exec>
+	</target>
+
+	<target name="mvn_cc_unix" if="isUnix">
+	    <exec dir="." executable="sh">
+	        <arg line="-c 'mvn javancss:report'" />
+	    </exec>
+	</target>
+	
 	<!-- ====== Targets ======== -->
 
 	<target name="init">
         <mkdir dir="target/classes"/>
         <mkdir dir="target/test-classes"/>
+		<mkdir dir="junit"/>
+		<mkdir dir="doc"/>
         <copy includeemptydirs="false" todir="target/classes"> 			<!-- Copiamos estructura de paquetes de las clases en target -->
             <fileset dir="src/main/java">
                 <exclude name="**/*.java"/>
@@ -69,13 +131,14 @@
         <delete dir="target/classes"/>
         <delete dir="target/test-classes"/>
 		<delete dir="junit"/>
+		<delete dir="doc"/>
     </target>
 
 
 	<target depends="limpiar, compilar-project" name="compilar"/>
 
 
-	<target depends="init" name="compilar-project">
+	<target depends="init, all" name="compilar-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" includeantruntime="false" source="${source}" target="${target}">
             <src path="src/main/java"/>
@@ -86,9 +149,6 @@
             <classpath refid="p3_jomarti_juablaz.classpath"/>
         </javac>
     </target>
-
-
-	<target description="Compile all projects which reference this project. Useful to propagate changes." name="compilar-refprojects"/>
 
 
 	<target name="ejecutar" depends="compilar">
@@ -138,15 +198,11 @@
     </target>
 	
 
-	<target name="obtenerInformeCobertura" depends="ejecutar">
-        <junitreport todir="${junit.output.dir}">
-            <fileset dir="${junit.output.dir}">
-                <include name="TEST-*.xml"/>
-            </fileset>
-            <report format="frames" todir="${junit.output.dir}"/>
-        </junitreport>
-    </target>
+	<target name="cobertura" depends="init, all, mvn_cobertura_unix, mvn_cobertura_windows"/>
 
+	
+	<target name="medidas" depends="init, all, mvn_test_unix, mvn_test_windows, mvn_cc_unix, mvn_cc_windows"/>
+	
 
 	<target name="documentar" depends="compilar">
 		<javadoc sourcepath="src/main/java" destdir="doc/classes">
