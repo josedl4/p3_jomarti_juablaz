@@ -6,6 +6,9 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
+ * @author jomarti Jose Luis Martín Martín
+ * @author juablaz Juan Carlos Blázquez Muñoz
+ * 
  * Representacion de un boletin de noticias.
  *
  */
@@ -287,7 +290,7 @@ public class Boletin implements Cloneable {
 	 * la pasada como parametro.
 	 * 
 	 * @param categoria Categoria de todas las noticias del subconjunto.
-	 * @return boletin Boletin que tiene un subconjunto de noticias del original.
+	 * @return subBoletin Boletin que tiene un subconjunto de noticias del original.
 	 */
 	public Boletin subConjunto(EnumCategoria categoria) {
 		if(categoria == null)
@@ -383,6 +386,12 @@ public class Boletin implements Cloneable {
 	}
 	
 	
+	/**
+	 * Función para la clonación de un objeto boletin
+	 * 
+	 * @param boletin boletin a clonar
+	 * @return newBoletin boletin copia del argumento
+	 */
 	public static Boletin cloneBoletin(Boletin boletin){
 		if(boletin == null)
 			throw new IllegalArgumentException("Valor del boletin null");

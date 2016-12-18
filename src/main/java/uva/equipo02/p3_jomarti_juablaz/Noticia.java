@@ -6,6 +6,9 @@ import java.net.URL;
 
 
 /**
+ * @author jomarti Jose Luis Martín Martín
+ * @author juablaz Juan Carlos Blázquez Muñoz
+ * 
  * Representacion de una noticia.
  *
  */
@@ -39,13 +42,14 @@ public class Noticia {
 	 * @throws IllegalArgumentException La fuente es vacia.
 	 */
 	public Noticia(String titular, GregorianCalendar fechaPublicacion, String fuente, URL url, EnumCategoria categoria){
-		if(titular == null) throw new IllegalArgumentException("Los parametros para crear la noticia no son correctos");
-		
-		String[] palabras = titular.split(" ");
-		if( titular.equals("") || (palabras.length > 13)
-				|| (fechaPublicacion == null) || (categoria == null) || (url == null)
-				|| (fuente == null) || fuente.equals(""))
-			throw new IllegalArgumentException("Los parametros para crear la noticia no son correctos");
+				
+		if(!checkTitular(titular)){
+			throw new IllegalArgumentException("El titular no es correcto");		
+		} else if(!checkNullValues(fechaPublicacion, categoria, url)){
+			throw new IllegalArgumentException("Algun parametro tiene valor null");	
+		} else if (!checkFuente(fuente)) {
+			throw new IllegalArgumentException("El formato de la fuente no es correcto");	
+		}
 		
 		this.titular = titular;
 		this.fechaPublicacion = fechaPublicacion;
@@ -180,8 +184,28 @@ public class Noticia {
 	}
 	
 	
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
+	private boolean checkTitular (String titular){
+		if(titular == null) return false;
+		
+		String[] palabras = titular.split(" ");
+		
+		if(titular.equals("") || (palabras.length > 13)){
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	
+	private boolean checkNullValues(GregorianCalendar fecha, 
+			EnumCategoria categoria, URL url) {
+		if(fecha == null || categoria == null || url == null) return false;
+		else return true;
+	}
+	
+	
+	private boolean checkFuente (String fuente) {
+		if(fuente == null || fuente.equals("")) return false;
+		else return true;
 	}
 }

@@ -6,7 +6,8 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ BoletinBlackBoxTest.class, TDDBoletinTest.class, 
-	NoticiaBlackBoxTest.class, TDDNoticiaTest.class, SequenceBoletinTest.class })
+	NoticiaBlackBoxTest.class, TDDNoticiaTest.class, SequenceBoletinTest.class,
+	BoletinMockTest.class})
 public class AllTests {
 
 }

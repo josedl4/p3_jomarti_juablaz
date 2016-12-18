@@ -48,11 +48,11 @@
 		<path refid="p3_jomarti_juablaz.classpath"/>
         <path refid="Maven Dependencies.libraryclasspath"/>
 	</path>
-	
+
 	<!-- ======================= -->
 
 	<!-- ======== OS =========== -->
-	
+
 	<condition property="isWindows">
 	    <os family="windows" />
 	</condition>
@@ -74,7 +74,7 @@
 	        <arg line="-c 'mvn clean install'" />
 	    </exec>
 	</target>
-	
+
 	<target name="mvn_test_windows" if="isWindows">
 	    <exec dir="." executable="cmd">
 	        <arg line="/c mvn test" />
@@ -86,7 +86,7 @@
 	        <arg line="-c 'mvn test'" />
 	    </exec>
 	</target>
-	
+
 	<target name="mvn_cobertura_windows" if="isWindows">
 	    <exec dir="." executable="cmd">
 	        <arg line="/c mvn cobertura:cobertura" />
@@ -98,7 +98,7 @@
 	        <arg line="-c 'mvn cobertura:cobertura'" />
 	    </exec>
 	</target>
-	
+
 	<target name="mvn_cc_windows" if="isWindows">
 	    <exec dir="." executable="cmd">
 	        <arg line="/c mvn javancss:report" />
@@ -110,7 +110,7 @@
 	        <arg line="-c 'mvn javancss:report'" />
 	    </exec>
 	</target>
-	
+
 	<!-- ====== Targets ======== -->
 
 	<target name="init">
@@ -136,6 +136,7 @@
         <delete dir="target/test-classes"/>
 		<delete dir="junit"/>
 		<delete dir="doc"/>
+    <delete dir="lib"/>
     </target>
 
 
@@ -155,7 +156,7 @@
     </target>
 
 
-	<target name="ejecutar" depends="compilar">
+	<target name="ejecutarTodo" depends="compilar">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
@@ -201,7 +202,7 @@
 
 
 	<target name="ejecutarTestDeSecuencia" depends="compilar">
-		
+
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
         	<formatter type="xml"/>
@@ -209,13 +210,13 @@
             <classpath refid="run.SequenceBoletinTest.classpath"/>
         </junit>
     </target>
-	
 
-	<target name="cobertura" depends="init, all, mvn_cobertura_unix, mvn_cobertura_windows"/>
 
-	
+	<target name="obtenerInformeCobertura" depends="init, all, mvn_cobertura_unix, mvn_cobertura_windows"/>
+
+
 	<target name="medidas" depends="init, all, mvn_test_unix, mvn_test_windows, mvn_cc_unix, mvn_cc_windows"/>
-	
+
 
 	<target name="documentar" depends="compilar">
 		<javadoc sourcepath="src/main/java" destdir="doc/classes">
